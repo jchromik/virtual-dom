@@ -10,7 +10,11 @@ function unsafeCoerce(value)
 
 var upload = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
-	var element = document.createElement('input');
+	var elmHistory = sessionStorage.getItem("elmHistory");
+	if(elmHistory) {
+		callback(_elm_lang$core$Native_Scheduler.succeed(sessionStorage.getItem("elmHistory")));
+	}
+	/*var element = document.createElement('input');
 	element.setAttribute('type', 'file');
 	element.setAttribute('accept', 'text/json');
 	element.style.display = 'none';
@@ -25,14 +29,15 @@ var upload = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 		document.body.removeChild(element);
 	});
 	document.body.appendChild(element);
-	element.click();
+	element.click();*/
 });
 
 function download(historyLength, json)
 {
 	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 	{
-		var fileName = 'history-' + historyLength + '.txt';
+		sessionStorage.setItem("elmHistory", JSON.stringify(json));
+		/*var fileName = 'history-' + historyLength + '.txt';
 		var jsonString = JSON.stringify(json);
 		var mime = 'text/plain;charset=utf-8';
 		var done = _elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0);
@@ -52,7 +57,7 @@ function download(historyLength, json)
 		document.body.appendChild(element);
 		element.click();
 		document.body.removeChild(element);
-		callback(done);
+		callback(done);*/
 	});
 }
 

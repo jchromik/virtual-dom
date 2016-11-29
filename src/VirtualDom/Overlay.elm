@@ -411,15 +411,15 @@ viewImportExport : List (Property msg) -> msg -> msg -> Node msg
 viewImportExport props importMsg exportMsg =
   div
     props
-    [ button importMsg "Import"
+    [ button importMsg "Import" "import"
     , text " / "
-    , button exportMsg "Export"
+    , button exportMsg "Export" "export"
     ]
 
 
-button : msg -> String -> Node msg
-button msg label =
-  span [ onClick msg, style [("cursor","pointer")] ] [ text label ]
+button : msg -> String -> String -> Node msg
+button msg label identifier =
+  span [ onClick msg, style [("cursor","pointer")], id identifier ] [ text label ]
 
 
 

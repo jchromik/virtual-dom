@@ -10,6 +10,17 @@ var ATTR_NS_KEY = 'ATTR_NS';
 
 var localDoc = typeof document !== 'undefined' ? document : {};
 
+////////////  LIVE RELOADING  ////////////
+
+window.addEventListener("load", function(event) {
+	setTimeout(function(){
+		document.getElementById("import").click();
+	},200);
+});
+
+window.addEventListener('beforeunload', function(event) {
+	document.getElementById("export").click();
+});
 
 ////////////  VIRTUAL DOM NODES  ////////////
 

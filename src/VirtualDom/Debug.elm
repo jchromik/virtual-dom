@@ -84,6 +84,7 @@ type Msg msg
   | Down
   | Import
   | Export
+  | Clear
   | Upload String
   | OverlayMsg Overlay.Msg
 
@@ -175,6 +176,10 @@ wrapUpdate userUpdate scrollTask msg model =
       withGoodMetadata model <| \metadata ->
         model ! [ download metadata model.history ]
 
+    Clear ->
+      withGoodMetadata model <| \_ ->
+        model ! [ clear ]
+
     Upload jsonString ->
       withGoodMetadata model <| \metadata ->
         case Overlay.assessImport metadata jsonString of
@@ -215,6 +220,11 @@ download metadata history =
         ]
   in
     Task.perform (\_ -> NoOp) (Native.Debug.download historyLength json)
+
+
+clear : Cmd (Msg msg)
+clear =
+  Task.perform Upload Native.Debug.clear
 
 
 
@@ -376,6 +386,7 @@ overlayConfig =
   , open = Open
   , importHistory = Import
   , exportHistory = Export
+  , clearHistory = Clear
   , wrap = OverlayMsg
   }
 
@@ -420,6 +431,8 @@ playButton maybeIndex =
         [ button Import "Import"
         , VDom.text " / "
         , button Export "Export"
+        , VDom.text " / "
+        , button Clear "Clear"
         ]
     ]
 

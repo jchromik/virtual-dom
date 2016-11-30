@@ -12,7 +12,7 @@ var upload = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
 	var elmHistory = sessionStorage.getItem("elmHistory");
 	if(elmHistory) {
-		callback(_elm_lang$core$Native_Scheduler.succeed(sessionStorage.getItem("elmHistory")));
+		callback(_elm_lang$core$Native_Scheduler.succeed(elmHistory));
 	}
 	/*var element = document.createElement('input');
 	element.setAttribute('type', 'file');
@@ -36,7 +36,10 @@ function download(historyLength, json)
 {
 	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 	{
-		sessionStorage.setItem("elmHistory", JSON.stringify(json));
+		if(!sessionStorage.getItem("elmClearFlag")) {
+			sessionStorage.setItem("elmHistory", JSON.stringify(json));
+		}
+		sessionStorage.removeItem("elmClearFlag");
 		/*var fileName = 'history-' + historyLength + '.txt';
 		var jsonString = JSON.stringify(json);
 		var mime = 'text/plain;charset=utf-8';
@@ -61,6 +64,12 @@ function download(historyLength, json)
 	});
 }
 
+var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	sessionStorage.removeItem("elmHistory");
+	sessionStorage.setItem("elmClearFlag", true);
+	window.location.reload(true);
+});
 
 // POPOUT
 
@@ -277,6 +286,7 @@ function addSlashes(str, isChar)
 return {
 	upload: upload,
 	download: F2(download),
+	clear: clear,
 	unsafeCoerce: unsafeCoerce,
 	messageToString: messageToString,
 	init: init

@@ -84,6 +84,8 @@ type Msg msg
   | Down
   | Import
   | Export
+  | Load
+  | Store
   | Clear
   | Upload String
   | OverlayMsg Overlay.Msg
@@ -173,6 +175,14 @@ wrapUpdate userUpdate scrollTask msg model =
         model ! [ upload ]
 
     Export ->
+      withGoodMetadata model <| \metadata ->
+        model ! [ download metadata model.history ]
+
+    Load ->
+      withGoodMetadata model <| \_ ->
+        model ! [ upload ]
+
+    Store ->
       withGoodMetadata model <| \metadata ->
         model ! [ download metadata model.history ]
 
@@ -386,6 +396,8 @@ overlayConfig =
   , open = Open
   , importHistory = Import
   , exportHistory = Export
+  , loadHistory = Load
+  , storeHistory = Store
   , clearHistory = Clear
   , wrap = OverlayMsg
   }
@@ -431,6 +443,10 @@ playButton maybeIndex =
         [ button Import "Import"
         , VDom.text " / "
         , button Export "Export"
+        , VDom.text " / "
+        , button Load "Load"
+        , VDom.text " / "
+        , button Store "Store"
         , VDom.text " / "
         , button Clear "Clear"
         ]

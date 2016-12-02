@@ -114,6 +114,8 @@ type alias Config msg =
   , open : msg
   , importHistory : msg
   , exportHistory : msg
+  , loadHistory : msg
+  , storeHistory : msg
   , clearHistory : msg
   , wrap : Msg -> msg
   }
@@ -405,17 +407,23 @@ viewMiniControls config numMsgs =
         [class "elm-mini-controls-import-export"]
         config.importHistory
         config.exportHistory
+        config.loadHistory
+        config.storeHistory
         config.clearHistory
     ]
 
 
-viewImportExport : List (Property msg) -> msg -> msg -> msg -> Node msg
-viewImportExport props importMsg exportMsg clearMsg =
+viewImportExport : List (Property msg) -> msg -> msg -> msg -> msg -> msg -> Node msg
+viewImportExport props importMsg exportMsg loadMsg storeMsg clearMsg =
   div
     props
     [ button importMsg "Import" "import"
     , text " / "
     , button exportMsg "Export" "export"
+    , text " / "
+    , button loadMsg "Load" "load"
+    , text " / "
+    , button storeMsg "Store" "store"
     , text " / "
     , button clearMsg "Clear" "clear"
     ]

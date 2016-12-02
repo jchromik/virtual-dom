@@ -180,11 +180,11 @@ wrapUpdate userUpdate scrollTask msg model =
 
     Load ->
       withGoodMetadata model <| \_ ->
-        model ! [ upload ]
+        model ! [ load ]
 
     Store ->
       withGoodMetadata model <| \metadata ->
-        model ! [ download metadata model.history ]
+        model ! [ store metadata model.history ]
 
     Clear ->
       withGoodMetadata model <| \_ ->
@@ -231,6 +231,23 @@ download metadata history =
   in
     Task.perform (\_ -> NoOp) (Native.Debug.download historyLength json)
 
+load : Cmd (Msg msg)
+load =
+  Task.perform Upload Native.Debug.load
+
+store : Metadata -> History model msg -> Cmd (Msg msg)
+store metadata history =
+  let
+    historyLength =
+      History.size history
+
+    json =
+      Encode.object
+        [ ("metadata", Metadata.encode metadata)
+        , ("history", History.encode history)
+        ]
+  in
+    Task.perform (\_ -> NoOp) (Native.Debug.store historyLength json)
 
 clear : Cmd (Msg msg)
 clear =

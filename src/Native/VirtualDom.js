@@ -14,12 +14,12 @@ var localDoc = typeof document !== 'undefined' ? document : {};
 
 window.addEventListener("load", function(event) {
 	setTimeout(function(){
-		document.getElementById("import").click();
+		document.getElementById("load").click();
 	},200);
 });
 
 window.addEventListener('beforeunload', function(event) {
-	document.getElementById("export").click();
+	document.getElementById("store").click();
 });
 
 ////////////  VIRTUAL DOM NODES  ////////////

@@ -64,6 +64,27 @@ function download(historyLength, json)
 	});
 }
 
+// loads the Elm history from the session storage
+var load = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	var elmHistory = sessionStorage.getItem("elmHistory");
+	if(elmHistory) {
+		callback(_elm_lang$core$Native_Scheduler.succeed(elmHistory));
+	}
+});
+
+// stores the Elm history to the session storage
+function store(historyLength, json)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		if(!sessionStorage.getItem("elmClearFlag")) {
+			sessionStorage.setItem("elmHistory", JSON.stringify(json));
+		}
+		sessionStorage.removeItem("elmClearFlag");
+	});
+}
+
 var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
 	sessionStorage.removeItem("elmHistory");
@@ -286,6 +307,8 @@ function addSlashes(str, isChar)
 return {
 	upload: upload,
 	download: F2(download),
+	load: load,
+	store: F2(store),
 	clear: clear,
 	unsafeCoerce: unsafeCoerce,
 	messageToString: messageToString,

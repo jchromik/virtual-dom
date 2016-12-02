@@ -416,16 +416,22 @@ viewMiniControls config numMsgs =
 viewImportExport : List (Property msg) -> msg -> msg -> msg -> msg -> msg -> Node msg
 viewImportExport props importMsg exportMsg loadMsg storeMsg clearMsg =
   div
-    props
-    [ button importMsg "Import" "import"
-    , text " / "
-    , button exportMsg "Export" "export"
-    , text " / "
-    , button loadMsg "Load" "load"
-    , text " / "
-    , button storeMsg "Store" "store"
-    , text " / "
-    , button clearMsg "Clear" "clear"
+    []
+    [
+    div
+      props
+      [ button importMsg "Import" "import"
+      , text " / "
+      , button exportMsg "Export" "export"
+      ],
+    div
+      props
+      [ button loadMsg "Load" "load"
+      , text " / "
+      , button storeMsg "Store" "store"
+      , text " / "
+      , button clearMsg "Clear" "clear"
+      ]
     ]
 
 

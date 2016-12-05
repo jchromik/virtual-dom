@@ -460,8 +460,9 @@ playButton maybeIndex =
         [ button Import "Import"
         , VDom.text " / "
         , button Export "Export"
-        , VDom.text " / "
-        , button Load "Load"
+        ]
+    , VDom.div [ VDom.class "debugger-sidebar-controls-import-export" ]
+        [ button Load "Load"
         , VDom.text " / "
         , button Store "Store"
         , VDom.text " / "
@@ -566,7 +567,7 @@ body {
 .debugger-sidebar-messages {
   width: 100%;
   overflow-y: auto;
-  height: calc(100% - 24px);
+  height: calc(100% - 48px);
 }
 
 .debugger-sidebar-messages-paused {

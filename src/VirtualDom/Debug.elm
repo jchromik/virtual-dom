@@ -298,7 +298,7 @@ loadNewHistory rawHistory userUpdate model =
             , expando = Expando.init latestUserModel
             , overlay = Overlay.none
         }
-          ! []
+          ! [ Task.perform (\_ -> NoOp) Native.Debug.notifyReplayFinished ]
 
 
 

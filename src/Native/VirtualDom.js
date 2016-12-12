@@ -15,7 +15,6 @@ var localDoc = typeof document !== 'undefined' ? document : {};
 window.addEventListener("load", function(event) {
 	setTimeout(function(){
 		document.getElementById("load").click();
-		window.parent.replayFinished();
 	},200);
 });
 

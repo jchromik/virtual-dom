@@ -84,6 +84,13 @@ var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 	window.location.reload(true);
 });
 
+// BENCHMARKING
+
+var notifyReplayFinished = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	window.parent.replayFinished();
+});
+
 // POPOUT
 
 function messageToString(value)
@@ -302,6 +309,7 @@ return {
 	load: load,
 	store: F2(store),
 	clear: clear,
+	notifyReplayFinished : notifyReplayFinished,
 	unsafeCoerce: unsafeCoerce,
 	messageToString: messageToString,
 	init: init

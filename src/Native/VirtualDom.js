@@ -19,6 +19,7 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener('beforeunload', function(event) {
+	console.log(Date.now());
 	document.getElementById("store").click();
 });
 

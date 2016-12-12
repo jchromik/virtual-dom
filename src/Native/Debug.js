@@ -88,7 +88,7 @@ var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 
 var notifyReplayFinished = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
-	window.parent.replayFinished();
+	console.log(Date.now());
 });
 
 // POPOUT

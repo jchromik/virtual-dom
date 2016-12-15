@@ -19,9 +19,36 @@ window.addEventListener("load", function(event) {
 });
 
 window.addEventListener('beforeunload', function(event) {
-	console.log(Date.now());
+	if(sessionStorage.getItem("benchmarking")) {
+		benchmarkEntry();
+	}
 	document.getElementById("store").click();
 });
+
+function benchmarkEntry() {
+	var logNumber = sessionStorage.getItem("logNumber");
+	if(!logNumber) {
+		logNumber = 0;
+		sessionStorage.setItem("logNumber", logNumber);
+	}
+
+	var logTag = sessionStorage.getItem("logTag");
+	if(!logTag) {
+		if(sessionStorage.getItem("benchmarking") == "counter") {
+			logTag = "counter_predictable";
+		}
+		if(sessionStorage.getItem("benchmarking") == "onlynumbers") {
+			logTag = "onlynumbers_predictable_keep";
+		}
+		sessionStorage.setItem("logTag", logTag);
+	}
+
+	var log = sessionStorage.getItem(logTag + logNumber);
+	if(!log) {
+		log = "";
+	}
+	sessionStorage.setItem(logTag + logNumber, log + Date.now() + "\n");
+}
 
 ////////////  VIRTUAL DOM NODES  ////////////
 

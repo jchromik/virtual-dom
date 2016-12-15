@@ -70,17 +70,17 @@ function store(historyLength, json)
 {
 	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 	{
-		if(!sessionStorage.getItem("elmClearFlag")) {
+		if(!sessionStorage.getItem("elmDoNotStore")) {
 			sessionStorage.setItem("elmHistory", JSON.stringify(json));
 		}
-		sessionStorage.removeItem("elmClearFlag");
+		sessionStorage.removeItem("elmDoNotStore");
 	});
 }
 
 var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
 	sessionStorage.removeItem("elmHistory");
-	sessionStorage.setItem("elmClearFlag", true);
+	sessionStorage.setItem("elmDoNotStore", true);
 	window.location.reload(true);
 });
 
@@ -88,7 +88,69 @@ var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 
 var notifyReplayFinished = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
-	console.log(Date.now());
+	var time = Date.now();
+	var maxLogLength = 10;
+	if(!sessionStorage.getItem("benchmarking")) {
+		return;
+	}
+
+	var logNumber = parseInt(sessionStorage.getItem("logNumber"));
+	var logTag = sessionStorage.getItem("logTag");
+	var log = sessionStorage.getItem(logTag + logNumber);
+	if(!log) {
+		log = "";
+	}
+	sessionStorage.setItem(logTag + logNumber, log + time + "\n");
+
+	if(log.split("\n").length >= maxLogLength) {
+		logNumber++;
+		if(logNumber >= 5) {
+			logNumber = 0;
+			if(logTag == "counter_predictable") {
+				logTag = "counter_unpredictable";
+			} else if(logTag == "onlynumbers_predictable_keep") {
+				logTag = "onlynumbers_predictable_reject";
+			} else if(logTag == "onlynumbers_predictable_reject") {
+				logTag = "onlynumbers_unpredictable";
+			}
+		}
+		sessionStorage.setItem("logNumber", logNumber);
+		sessionStorage.setItem("logTag", logTag);
+
+		var elmHistory = JSON.parse(sessionStorage.getItem("elmHistory"));
+		elmHistory.history = [];
+
+		if(logNumber > 0) {
+			for(var i=0; i<Math.pow(10,logNumber); i++) {
+				if(logTag == "counter_predictable") {
+					elmHistory.history.push({"ctor":"Increment"});
+				}
+				if(logTag == "counter_unpredictable") {
+					if(Math.floor(Math.random()*2) == 0) {
+						elmHistory.history.push({"ctor":"Increment"});
+					} else {
+						elmHistory.history.push({"ctor":"Decrement"});
+					}
+				}
+				if(logTag == "onlynumbers_predictable_keep") {
+					elmHistory.history.push({"ctor":"Change","_0":"1"});
+				}
+				if(logTag == "onlynumbers_predictable_reject") {
+					elmHistory.history.push({"ctor":"Change","_0":"a"});
+				}
+				if(logTag == "onlynumbers_unpredictable") {
+					if(Math.floor(Math.random()*2) == 0) {
+						elmHistory.history.push({"ctor":"Change","_0":"1"});
+					} else {
+						elmHistory.history.push({"ctor":"Change","_0":"a"});
+					}
+				}
+			}
+		}
+
+		sessionStorage.setItem("elmHistory", JSON.stringify(elmHistory));
+		sessionStorage.setItem("elmDoNotStore", true);
+	}
 });
 
 // POPOUT

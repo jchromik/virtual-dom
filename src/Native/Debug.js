@@ -89,7 +89,7 @@ var clear = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 var notifyReplayFinished = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
 {
 	var time = Date.now();
-	var maxLogLength = 10;
+	var maxLogLength = 200;
 	if(!sessionStorage.getItem("benchmarking")) {
 		return;
 	}
